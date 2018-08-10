@@ -113,6 +113,7 @@ with graph_1.as_default():
 
     cnn_out = tf.reshape(convolution5,[batch_size, -1, 512])
     cnn_out = tf.transpose(cnn_out,[0,2,1])
+    cnn_out.set_shape([batch_size,512,6*62])
 
     rnn_cells_fw = [tf.contrib.rnn.LSTMCell(hidden_neuron, state_is_tuple = True) for i in range(layer_num)]
     rnn_cells_bw = [tf.contrib.rnn.LSTMCell(hidden_neuron, state_is_tuple = True) for i in range(layer_num)]
@@ -217,7 +218,7 @@ with tf.device('/cpu:0'):
 
                 feed = {inputs: batch_inputs,
                         labels: batch_labels,
-                        seq_len: np.ones(batch_size)*(6*62), #batch_seq_len,
+                        seq_len: np.ones(batch_size)*512, #batch_seq_len,
                         label_len: batch_label_len,
                         flatten_labels: batch_flatten_labels} 
                 #print(batch_inputs)

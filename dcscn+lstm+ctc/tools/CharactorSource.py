@@ -46,7 +46,7 @@ class charactorsource(object):
 
         #i = 0
         self.chi_list = []
-        with open('/home/melt61/PictureGenerator/OCR-Picture-Generators/Chinese-Generation/common/dict-common') as f:
+        with open('./tools/dict-common') as f:
             for line in f.readlines():
                 #i = i+1
                 temp = line.rstrip('\n')
@@ -64,6 +64,11 @@ class charactorsource(object):
 
         self.char_to_int = dict((c, i) for i, c in enumerate(self.charactor_map_list))
         self.int_to_char = dict((i, c) for i, c in enumerate(self.charactor_map_list))
+
+        #attention dict
+        attAppend = {'<S>': 0, '</S>': 1, '<UNK>': 2}
+        primedict = dict((c, i+3) for i, c in enumerate(self.charactor_map_list))
+        self.char_to_int_att = {**attAppend,**primedict}
 
         self.eng_char_to_int = dict((c,i) for i,c in enumerate(self.eng_charactor_map_list))
         self.eng_int_to_char = dict((i,c) for i,c in enumerate(self.eng_charactor_map_list))
@@ -86,6 +91,14 @@ class charactorsource(object):
 
     def int2char(self, data):
         integer_decoded = [self.int_to_char[index] for index in data]
+        return integer_decoded
+
+    def char2intAtt(self, data):
+        integer_encoded = [self.char_to_int[char]+3 for char in data]
+        return integer_encoded
+    
+    def int2charAtt(self, data):
+        integer_decoded = [self.int_to_char[index-3] for index in data]
         return integer_decoded
 
     def eng_char2int(self, data):
